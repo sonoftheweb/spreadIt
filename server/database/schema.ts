@@ -1,5 +1,5 @@
 // Import all schema components from the schemas directory
-import * as schemas from "./schemas";
+import * as schemas from "./schemas/index";
 
 // Re-export everything to maintain compatibility with existing code
 export const {
@@ -10,7 +10,7 @@ export const {
   rows,
   columnsMetadata,
   dataValues,
-  
+
   // Relations
   usersRelations,
   sessionsRelations,
@@ -19,6 +19,3 @@ export const {
   columnsMetadataRelations,
   dataValuesRelations,
 } = schemas;
-
-// Export everything
-export * from "./schemas";
