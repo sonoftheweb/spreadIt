@@ -1,0 +1,74 @@
+//// -------------------------------------- ////
+////  EAV Database for Dynamic Excel Data   ////
+//// -------------------------------------- ////
+
+// The 'Sessions' table keeps track of upload sessions.
+// Each session can contain multiple files.
+Table Sessions {
+  session_id integer [pk, increment] // Auto-incrementing primary key
+  session_name text [unique, not null] // User-defined name for the upload session
+  upload_timestamp timestamp [default: `now()`, not null] // When the session was created
+}
+
+// The 'Files' table stores metadata about each uploaded Excel file.
+Table Files {
+  file_id integer [pk, increment] // Auto-incrementing primary key
+  session_id integer [not null] // Foreign key to Sessions table
+  original_filename text [not null] // Original name of the uploaded Excel file
+  upload_timestamp timestamp [default: `now()`, not null] // When the file was uploaded
+}
+
+// The 'Rows' table (or 'Entities') represents each row from an Excel file.
+Table Rows {
+  row_id integer [pk, increment] // Auto-incrementing primary key for each data row across all files
+  file_id integer [not null] // Foreign key to Files table, indicating which file this row belongs to
+  row_number_in_file integer [not null] // Original row number from the Excel file (e.g., 1, 2, 3...)
+
+  Indexes {
+    (file_id, row_number_in_file) [unique] // A row number should be unique within its file
+  }
+}
+
+// The 'ColumnsMetadata' table (or 'Attributes') stores information about each column
+// encountered in the Excel files, including its inferred data type.
+Table ColumnsMetadata {
+  column_id integer [pk, increment] // Auto-incrementing primary key for each unique column definition
+  file_id integer [not null] // Foreign key to Files table, scoping the column to a specific file
+  column_name text [not null] // The header name of the column from the Excel file
+  detected_data_type text [not null, note: "Stores inferred type like 'TEXT', 'INTEGER', 'REAL', 'DATETIME', 'BOOLEAN'"] // Inferred data type for this column in this file
+
+  Indexes {
+    (file_id, column_name) [unique] // A column name should be unique within its file
+  }
+}
+
+// The 'DataValues' table (or 'Values') stores the actual cell data.
+// This uses Approach B with separate columns for different data types.
+Table DataValues {
+  value_id integer [pk, increment] // Auto-incrementing primary key for each cell value
+  row_id integer [not null] // Foreign key to Rows table, linking the value to a specific row
+  column_id integer [not null] // Foreign key to ColumnsMetadata table, linking the value to a specific column definition
+
+  // Value columns - only one of these will be populated per row in DataValues,
+  // based on the 'detected_data_type' in ColumnsMetadata.
+  // Absence of 'not null' implies these are nullable.
+  value_text text
+  value_integer integer
+  value_real float // Using float for REAL/decimal numbers
+  value_datetime text [note: "Store as ISO8601 string e.g., 'YYYY-MM-DD HH:MM:SS'"]
+  value_boolean boolean [note: "Store as true/false or 1/0"]
+
+  Indexes {
+    (row_id, column_id) [unique] // Each cell (row_id, column_id pair) should be unique
+  }
+}
+
+//// -------------------------------------- ////
+////  Relationships                         ////
+//// -------------------------------------- ////
+
+Ref FK_Files_Sessions: Files.session_id > Sessions.session_id
+Ref FK_Rows_Files: Rows.file_id > Files.file_id
+Ref FK_ColumnsMetadata_Files: ColumnsMetadata.file_id > Files.file_id
+Ref FK_DataValues_Rows: DataValues.row_id > Rows.row_id
+Ref FK_DataValues_ColumnsMetadata: DataValues.column_id > ColumnsMetadata.column_id

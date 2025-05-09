@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// The 'Sessions' table keeps track of upload sessions.
+// Each session can contain multiple files.
+model Session {
+  id               Int      @id @default(autoincrement()) // Auto-incrementing primary key
+  name             String   @unique // User-defined name for the upload session
+  uploadTimestamp  DateTime @default(now()) // When the session was created
+  files            File[]   // Relationship to Files
+}
+
+// The 'Files' table stores metadata about each uploaded Excel file.
+model File {
+  id                Int               @id @default(autoincrement()) // Auto-incrementing primary key
+  sessionId         Int               // Foreign key to Sessions table
+  originalFilename  String            // Original name of the uploaded Excel file
+  uploadTimestamp   DateTime          @default(now()) // When the file was uploaded
+  session           Session           @relation(fields: [sessionId], references: [id])
+  rows              Row[]             // Relationship to Rows
+  columns           ColumnMetadata[]  // Relationship to ColumnsMetadata
+}
+
+// The 'Rows' table (or 'Entities') represents each row from an Excel file.
+model Row {
+  id              Int          @id @default(autoincrement()) // Auto-incrementing primary key for each data row across all files
+  fileId          Int          // Foreign key to Files table, indicating which file this row belongs to
+  rowNumberInFile Int          // Original row number from the Excel file (e.g., 1, 2, 3...)
+  file            File         @relation(fields: [fileId], references: [id])
+  dataValues      DataValue[]  // Relationship to DataValues
+
+  @@unique([fileId, rowNumberInFile]) // A row number should be unique within its file
+}
+
+// The 'ColumnsMetadata' table (or 'Attributes') stores information about each column
+// encountered in the Excel files, including its inferred data type.
+model ColumnMetadata {
+  id               Int          @id @default(autoincrement()) // Auto-incrementing primary key for each unique column definition
+  fileId           Int          // Foreign key to Files table, scoping the column to a specific file
+  columnName       String       // The header name of the column from the Excel file
+  detectedDataType String       // Inferred data type for this column in this file
+  file             File         @relation(fields: [fileId], references: [id])
+  dataValues       DataValue[]  // Relationship to DataValues
+
+  @@unique([fileId, columnName]) // A column name should be unique within its file
+}
+
+// The 'DataValues' table (or 'Values') stores the actual cell data.
+// This uses Approach B with separate columns for different data types.
+model DataValue {
+  id               Int             @id @default(autoincrement()) // Auto-incrementing primary key for each cell value
+  rowId            Int             // Foreign key to Rows table, linking the value to a specific row
+  columnId         Int             // Foreign key to ColumnsMetadata table, linking the value to a specific column definition
+  
+  // Value columns - only one of these will be populated per row in DataValues,
+  // based on the 'detected_data_type' in ColumnsMetadata.
+  valueText        String?
+  valueInteger     Int?
+  valueReal        Float?          // Using float for REAL/decimal numbers
+  valueDatetime    String?         // Store as ISO8601 string e.g., 'YYYY-MM-DD HH:MM:SS'
+  valueBoolean     Boolean?        // Store as true/false or 1/0
+  
+  row              Row             @relation(fields: [rowId], references: [id])
+  column           ColumnMetadata  @relation(fields: [columnId], references: [id])
+
+  @@unique([rowId, columnId]) // Each cell (row_id, column_id pair) should be unique
+}
