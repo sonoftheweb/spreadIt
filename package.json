@@ -5,15 +5,20 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:pull": "drizzle-kit pull",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxt/fonts": "^0.11.2",
+    "@libsql/client": "^0.15.4",
     "@nuxt/icon": "^1.12.0",
     "@nuxt/ui": "^3.1.1",
-    "@prisma/nuxt": "^0.3.0",
+    "better-sqlite3": "^11.10.0",
+    "drizzle-orm": "^0.43.1",
     "nuxt": "^3.17.2",
     "typescript": "^5.8.3",
     "vue": "^3.5.13",
@@ -21,6 +26,8 @@
     "zod": "^3.24.4"
   },
   "devDependencies": {
-    "@vee-validate/nuxt": "^4.15.0"
+    "@types/better-sqlite3": "^7.6.13",
+    "@vee-validate/nuxt": "^4.15.0",
+    "drizzle-kit": "^0.31.1"
   }
 }
