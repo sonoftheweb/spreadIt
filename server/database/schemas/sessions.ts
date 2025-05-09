@@ -1,5 +1,6 @@
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { relations } from "drizzle-orm";
+import { files } from "./files";
 
 /**
  * Sessions table schema
@@ -14,5 +15,5 @@ export const sessions = sqliteTable("sessions", {
  * Sessions table relations
  */
 export const sessionsRelations = relations(sessions, ({ many }) => ({
-  files: many(/* files */), // Will be imported and properly referenced once files.ts is created
+  files: many(files),
 }));

@@ -1,6 +1,7 @@
 import { sqliteTable, text, integer, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { relations } from "drizzle-orm";
 import { files } from "./files";
+import { dataValues } from "./dataValues";
 
 /**
  * Rows table schema
@@ -21,5 +22,5 @@ export const rowsRelations = relations(rows, ({ one, many }) => ({
     fields: [rows.fileId],
     references: [files.fileId],
   }),
-  dataValues: many(/* dataValues */), // Will be imported and properly referenced once dataValues.ts is created
+  dataValues: many(dataValues),
 }));
