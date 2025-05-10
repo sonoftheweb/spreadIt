@@ -1,8 +1,23 @@
-// Import all schema components from the schemas directory
-import * as schemas from "./schemas/index";
+// Import tables and relations from their respective files
+import {
+  users,
+  tenants,
+  tenantUser,
+  passwordResetTokens,
+  personalAccessTokens,
+  failedJobs,
+  jobs
+} from "./tables";
 
-// Re-export everything to maintain compatibility with existing code
-export const {
+import {
+  usersRelations,
+  tenantsRelations,
+  tenantUserRelations,
+  personalAccessTokensRelations
+} from "./relations";
+
+// Export everything to maintain compatibility with existing code
+export {
   // Tables
   users,
   tenants,
@@ -16,4 +31,5 @@ export const {
   usersRelations,
   tenantsRelations,
   tenantUserRelations,
-} = schemas;
+  personalAccessTokensRelations
+};
