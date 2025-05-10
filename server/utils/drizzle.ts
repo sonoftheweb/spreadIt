@@ -1,33 +1,47 @@
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import Database from "better-sqlite3";
-export { sql, eq, and, or } from "drizzle-orm";
+import { eq, and, or, asc, desc, isNull, isNotNull, sql } from "drizzle-orm";
 
 import * as schema from "../database/schema";
 
+// Export Drizzle helper functions
+export { eq, and, or, asc, desc, isNull, isNotNull, sql };
+
+// Export all tables
 export const tables = schema;
 
+/**
+ * Creates and returns a Drizzle ORM instance connected to the SQLite database
+ */
 export function useDrizzle() {
-  const dbUrl = process.env.DATABASE_URL || "file:./sqlite.db";
+  const dbUrl = process.env.DATABASE_URL || "file:./dev.db";
   // Remove 'file:' prefix if present
   const filePath = dbUrl.replace(/^file:/, "");
   const sqlite = new Database(filePath);
   return drizzle(sqlite, { schema });
 }
 
+// Type exports for tables
 export type User = typeof schema.users.$inferSelect;
 export type NewUser = typeof schema.users.$inferInsert;
 
-export type Session = typeof schema.sessions.$inferSelect;
-export type NewSession = typeof schema.sessions.$inferInsert;
+export type Tenant = typeof schema.tenants.$inferSelect;
+export type NewTenant = typeof schema.tenants.$inferInsert;
 
-export type File = typeof schema.files.$inferSelect;
-export type NewFile = typeof schema.files.$inferInsert;
+export type TenantUser = typeof schema.tenantUser.$inferSelect;
+export type NewTenantUser = typeof schema.tenantUser.$inferInsert;
 
-export type Row = typeof schema.rows.$inferSelect;
-export type NewRow = typeof schema.rows.$inferInsert;
+export type PasswordResetToken = typeof schema.passwordResetTokens.$inferSelect;
+export type NewPasswordResetToken =
+  typeof schema.passwordResetTokens.$inferInsert;
 
-export type ColumnMetadata = typeof schema.columnsMetadata.$inferSelect;
-export type NewColumnMetadata = typeof schema.columnsMetadata.$inferInsert;
+export type PersonalAccessToken =
+  typeof schema.personalAccessTokens.$inferSelect;
+export type NewPersonalAccessToken =
+  typeof schema.personalAccessTokens.$inferInsert;
 
-export type DataValue = typeof schema.dataValues.$inferSelect;
-export type NewDataValue = typeof schema.dataValues.$inferInsert;
+export type FailedJob = typeof schema.failedJobs.$inferSelect;
+export type NewFailedJob = typeof schema.failedJobs.$inferInsert;
+
+export type Job = typeof schema.jobs.$inferSelect;
+export type NewJob = typeof schema.jobs.$inferInsert;

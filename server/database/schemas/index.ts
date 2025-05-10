@@ -1,7 +1,8 @@
 // Export all table schemas
 export * from "./users";
-export * from "./sessions";
-export * from "./files";
-export * from "./rows";
-export * from "./columnsMetadata";
-export * from "./dataValues";
+export * from "./tenants";
+export * from "./tenantUser";
+export * from "./passwordResetTokens";
+export * from "./personalAccessTokens";
+export * from "./failedJobs";
+export * from "./jobs";

@@ -5,17 +5,15 @@ import * as schemas from "./schemas/index";
 export const {
   // Tables
   users,
-  sessions,
-  files,
-  rows,
-  columnsMetadata,
-  dataValues,
+  tenants,
+  tenantUser,
+  passwordResetTokens,
+  personalAccessTokens,
+  failedJobs,
+  jobs,
 
   // Relations
   usersRelations,
-  sessionsRelations,
-  filesRelations,
-  rowsRelations,
-  columnsMetadataRelations,
-  dataValuesRelations,
+  tenantsRelations,
+  tenantUserRelations,
 } = schemas;
