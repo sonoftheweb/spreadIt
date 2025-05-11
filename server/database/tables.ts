@@ -1,4 +1,9 @@
-import { sqliteTable, text, integer, primaryKey } from "drizzle-orm/sqlite-core";
+import {
+  sqliteTable,
+  text,
+  integer,
+  primaryKey,
+} from "drizzle-orm/sqlite-core";
 
 /**
  * Users table schema
@@ -10,7 +15,7 @@ export const users = sqliteTable("users", {
   emailVerifiedAt: integer("email_verified_at", { mode: "timestamp" }),
   password: text("password").notNull(),
   rememberToken: text("remember_token", { length: 100 }),
-  lastActiveTenantId: text("last_active_tenant_id"),
+  approved: integer("approved").default(0),
   createdAt: integer("created_at", { mode: "timestamp" }).defaultNow(),
   updatedAt: integer("updated_at", { mode: "timestamp" }).defaultNow(),
   deletedAt: integer("deleted_at", { mode: "timestamp" }),
@@ -47,7 +52,7 @@ export const tenantUser = sqliteTable(
   },
   (table) => ({
     pk: primaryKey({ columns: [table.tenantId, table.userId] }),
-  })
+  }),
 );
 
 /**
