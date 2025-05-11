@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "a1848687-41de-4d6d-8566-404a835da2ad",
+  "id": "8283bc46-1a7f-4ffc-a60a-9d60f782666a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "failed_jobs": {

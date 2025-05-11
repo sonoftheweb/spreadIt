@@ -1,14 +1,11 @@
-import { drizzle } from "drizzle-orm/better-sqlite3";
-import Database from "better-sqlite3";
-// Only import sql since it's used for timestamp default values
+import { drizzle } from "drizzle-orm/libsql";
+import { createClient } from "@libsql/client";
 import * as orm from "drizzle-orm";
 
 import * as schema from "../database/schema";
 
-// Only export what's currently being used
 export { orm };
 
-// Export all tables
 export const tables = schema;
 
 /**
@@ -16,12 +13,16 @@ export const tables = schema;
  */
 export function useDrizzle() {
   const dbUrl = process.env.DATABASE_URL || "file:./dev.db";
-  const filePath = dbUrl.replace(/^file:/, "");
-  const sqlite = new Database(filePath);
-  return drizzle(sqlite, { schema });
+  
+  // Create libSQL client
+  const client = createClient({
+    url: dbUrl,
+  });
+  
+  // Return drizzle instance
+  return drizzle(client, { schema });
 }
 
-// Type exports for tables
 export type User = typeof schema.users.$inferSelect;
 export type NewUser = typeof schema.users.$inferInsert;
 
