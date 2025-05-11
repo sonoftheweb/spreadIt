@@ -6,8 +6,13 @@ export default defineNuxtConfig({
   css: ["~/assets/css/main.css"],
   ui: {
     fonts: false,
+    colorMode: false,
   },
   veeValidate: {
     autoImports: false,
+  },
+  icon: {
+    mode: "css",
+    cssLayer: "base",
   },
 });

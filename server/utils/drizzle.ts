@@ -1,11 +1,12 @@
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import Database from "better-sqlite3";
-import { eq, and, or, asc, desc, isNull, isNotNull, sql } from "drizzle-orm";
+// Only import sql since it's used for timestamp default values
+import * as orm from "drizzle-orm";
 
 import * as schema from "../database/schema";
 
-// Export Drizzle helper functions
-export { eq, and, or, asc, desc, isNull, isNotNull, sql };
+// Only export what's currently being used
+export { orm };
 
 // Export all tables
 export const tables = schema;
@@ -15,7 +16,6 @@ export const tables = schema;
  */
 export function useDrizzle() {
   const dbUrl = process.env.DATABASE_URL || "file:./dev.db";
-  // Remove 'file:' prefix if present
   const filePath = dbUrl.replace(/^file:/, "");
   const sqlite = new Database(filePath);
   return drizzle(sqlite, { schema });
