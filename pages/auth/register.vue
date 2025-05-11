@@ -46,7 +46,10 @@ const { handleSubmit, errors, isSubmitting, meta, values } = useForm({
 const nameAttrs = { id: "name", name: "name" };
 const emailAttrs = { id: "email", name: "email" };
 const passwordAttrs = { id: "password", name: "password" };
-const passwordConfirmationAttrs = { id: "passwordConfirmation", name: "passwordConfirmation" };
+const passwordConfirmationAttrs = {
+  id: "passwordConfirmation",
+  name: "passwordConfirmation",
+};
 
 // Handle form submission
 const submitForm = handleSubmit(async (values) => {
@@ -73,17 +76,18 @@ const submitForm = handleSubmit(async (values) => {
 
     // Redirect to login page after successful registration
     router.push("/auth/login");
-  } catch (err) {
+  } catch (err: unknown) {
     console.error("Registration error:", err);
     globalError.value =
-      err.message || "An error occurred during registration. Please try again.";
+      (err as Error).message ||
+      "An error occurred during registration. Please try again.";
   } finally {
     loading.value = false;
   }
 });
 
 // Navigation function
-const navigateTo = (path) => {
+const navigateTo = (path: string) => {
   router.push(`/auth/${path}`);
 };
 </script>
@@ -95,25 +99,31 @@ const navigateTo = (path) => {
       <div class="w-full h-full flex flex-col items-center justify-center px-4">
         <div class="max-w-sm w-full text-gray-600 space-y-8">
           <div class="text-center">
-            <img
+            <!-- <img
               src="https://liveloads.ca/wp-content/uploads/2024/06/cropped-LiveLoads-logo_lg-200x58.png"
               width="150"
               class="mx-auto"
-            />
+            /> -->
             <div class="mt-5 space-y-2">
-              <h3 class="text-gray-800 text-2xl font-bold sm:text-3xl">Create your account</h3>
+              <h3 class="text-gray-800 text-2xl font-bold sm:text-3xl">
+                Create your account
+              </h3>
               <p class="">
                 Already have an account?
                 <a
                   class="font-medium text-cyan-600 hover:text-cyan-500 cursor-pointer"
                   @click="navigateTo('login')"
-                >Sign in</a>
+                  >Sign in</a
+                >
               </p>
             </div>
           </div>
-          
+
           <!-- Show API errors at the top of the form -->
-          <div v-if="globalError" class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+          <div
+            v-if="globalError"
+            class="bg-red-50 border-l-4 border-red-500 p-4 mb-4"
+          >
             <div class="flex">
               <div class="flex-shrink-0">
                 <UIcon name="i-lucide-alert-circle" class="text-red-500" />
@@ -201,7 +211,10 @@ const navigateTo = (path) => {
                         : 'text-gray-400 text-xs mt-1'
                     "
                   >
-                    {{ errors.password || "Password must be at least 8 characters with one uppercase letter and one number" }}
+                    {{
+                      errors.password ||
+                      "Password must be at least 8 characters with one uppercase letter and one number"
+                    }}
                   </p>
                 </template>
               </UFormField>
@@ -239,20 +252,28 @@ const navigateTo = (path) => {
               class="w-full mt-4 px-4 py-2 text-white font-medium bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-600 rounded-lg duration-150"
               :disabled="isSubmitting || loading"
             >
-              {{ isSubmitting || loading ? "Creating account..." : "Create Account" }}
+              {{
+                isSubmitting || loading
+                  ? "Creating account..."
+                  : "Create Account"
+              }}
             </button>
           </form>
 
           <div class="relative">
             <span class="block w-full h-px bg-gray-300"></span>
-            <p class="inline-block w-fit text-sm bg-white px-2 absolute -top-2 inset-x-0 mx-auto">
+            <p
+              class="inline-block w-fit text-sm bg-white px-2 absolute -top-2 inset-x-0 mx-auto"
+            >
               Or sign up with
             </p>
           </div>
 
           <div class="space-y-4 text-sm font-medium">
             <!-- Google Button -->
-            <button class="w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg hover:bg-gray-50 duration-150 active:bg-gray-100">
+            <button
+              class="w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg hover:bg-gray-50 duration-150 active:bg-gray-100"
+            >
               <img
                 src="https://raw.githubusercontent.com/sidiDev/remote-assets/7cd06bf1d8859c578c2efbfda2c68bd6bedc66d8/google-icon.svg"
                 alt="Google"
@@ -260,9 +281,11 @@ const navigateTo = (path) => {
               />
               Continue with Google
             </button>
-            
+
             <!-- Twitter Button -->
-            <button class="w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg hover:bg-gray-50 duration-150 active:bg-gray-100">
+            <button
+              class="w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg hover:bg-gray-50 duration-150 active:bg-gray-100"
+            >
               <img
                 src="https://raw.githubusercontent.com/sidiDev/remote-assets/f7119b9bdd8c58864383802fb92c7fc3a25c0646/twitter-icon.svg"
                 alt="Twitter"
@@ -270,9 +293,11 @@ const navigateTo = (path) => {
               />
               Continue with Twitter
             </button>
-            
+
             <!-- Github Button -->
-            <button class="w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg hover:bg-gray-50 duration-150 active:bg-gray-100">
+            <button
+              class="w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg hover:bg-gray-50 duration-150 active:bg-gray-100"
+            >
               <img
                 src="https://raw.githubusercontent.com/sidiDev/remote-assets/0d3b55a09c6bb8155ca19f43283dc6d88ff88bf5/github-icon.svg"
                 alt="Github"
