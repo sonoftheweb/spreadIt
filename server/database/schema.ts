@@ -2,6 +2,7 @@
 import {
   users,
   tenants,
+  tenantTypes,
   tenantUser,
   passwordResetTokens,
   personalAccessTokens,
@@ -12,15 +13,16 @@ import {
 import {
   usersRelations,
   tenantsRelations,
+  tenantTypesRelations,
   tenantUserRelations,
   personalAccessTokensRelations
 } from "./relations";
 
-// Export everything to maintain compatibility with existing code
 export {
   // Tables
   users,
   tenants,
+  tenantTypes,
   tenantUser,
   passwordResetTokens,
   personalAccessTokens,
@@ -30,6 +32,7 @@ export {
   // Relations
   usersRelations,
   tenantsRelations,
+  tenantTypesRelations,
   tenantUserRelations,
   personalAccessTokensRelations
 };

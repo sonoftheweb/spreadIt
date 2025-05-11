@@ -57,10 +57,8 @@ const submitForm = handleSubmit(async (values) => {
     loading.value = true;
     globalError.value = "";
 
-    // Log for testing (remove in production)
     console.log("Form submitted with values:", values);
 
-    // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Here you would typically make an API call to register the user
@@ -85,11 +83,6 @@ const submitForm = handleSubmit(async (values) => {
     loading.value = false;
   }
 });
-
-// Navigation function
-const navigateTo = (path: string) => {
-  router.push(`/auth/${path}`);
-};
 </script>
 
 <template>
@@ -112,14 +105,13 @@ const navigateTo = (path: string) => {
                 Already have an account?
                 <a
                   class="font-medium text-cyan-600 hover:text-cyan-500 cursor-pointer"
-                  @click="navigateTo('login')"
+                  @click="navigateTo('/auth/login')"
                   >Sign in</a
                 >
               </p>
             </div>
           </div>
 
-          <!-- Show API errors at the top of the form -->
           <div
             v-if="globalError"
             class="bg-red-50 border-l-4 border-red-500 p-4 mb-4"
@@ -137,7 +129,6 @@ const navigateTo = (path: string) => {
           </div>
 
           <form @submit.prevent="submitForm">
-            <!-- Name field -->
             <div class="mb-4">
               <UFormField label="Full Name" size="xl">
                 <UInput
@@ -163,7 +154,6 @@ const navigateTo = (path: string) => {
               </UFormField>
             </div>
 
-            <!-- Email field -->
             <div class="mb-4">
               <UFormField label="Email" size="xl">
                 <UInput
@@ -190,7 +180,6 @@ const navigateTo = (path: string) => {
               </UFormField>
             </div>
 
-            <!-- Password field -->
             <div class="mb-4">
               <UFormField label="Password" size="xl">
                 <UInput
@@ -220,7 +209,6 @@ const navigateTo = (path: string) => {
               </UFormField>
             </div>
 
-            <!-- Password Confirmation field -->
             <div class="mb-4">
               <UFormField label="Confirm Password" size="xl">
                 <UInput
@@ -270,7 +258,6 @@ const navigateTo = (path: string) => {
           </div>
 
           <div class="space-y-4 text-sm font-medium">
-            <!-- Google Button -->
             <button
               class="w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg hover:bg-gray-50 duration-150 active:bg-gray-100"
             >
@@ -282,7 +269,6 @@ const navigateTo = (path: string) => {
               Continue with Google
             </button>
 
-            <!-- Twitter Button -->
             <button
               class="w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg hover:bg-gray-50 duration-150 active:bg-gray-100"
             >
@@ -294,7 +280,6 @@ const navigateTo = (path: string) => {
               Continue with Twitter
             </button>
 
-            <!-- Github Button -->
             <button
               class="w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg hover:bg-gray-50 duration-150 active:bg-gray-100"
             >

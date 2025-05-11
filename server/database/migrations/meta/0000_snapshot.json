@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "9394d377-ecf0-47a8-bdc6-2dc6efa6bdad",
+  "id": "a1848687-41de-4d6d-8566-404a835da2ad",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "failed_jobs": {
@@ -9,10 +9,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": true
         },
         "uuid": {
           "name": "uuid",
@@ -77,10 +77,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": true
         },
         "queue": {
           "name": "queue",
@@ -169,10 +169,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": true
         },
         "tokenable_type": {
           "name": "tokenable_type",
@@ -245,6 +245,68 @@
           "name": "personal_access_tokens_token_unique",
           "columns": [
             "token"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "tenant_types": {
+      "name": "tenant_types",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        }
+      },
+      "indexes": {
+        "tenant_types_name_unique": {
+          "name": "tenant_types_name_unique",
+          "columns": [
+            "name"
+          ],
+          "isUnique": true
+        },
+        "tenant_types_key_unique": {
+          "name": "tenant_types_key_unique",
+          "columns": [
+            "key"
           ],
           "isUnique": true
         }
@@ -348,6 +410,13 @@
           "notNull": false,
           "autoincrement": false
         },
+        "type_id": {
+          "name": "type_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "owner_id": {
           "name": "owner_id",
           "type": "text",
@@ -395,7 +464,21 @@
           "isUnique": true
         }
       },
-      "foreignKeys": {},
+      "foreignKeys": {
+        "tenants_type_id_tenant_types_id_fk": {
+          "name": "tenants_type_id_tenant_types_id_fk",
+          "tableFrom": "tenants",
+          "tableTo": "tenant_types",
+          "columnsFrom": [
+            "type_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}

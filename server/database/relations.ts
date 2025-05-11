@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { users, tenants, tenantUser, personalAccessTokens } from "./tables";
+import { users, tenants, tenantTypes, tenantUser, personalAccessTokens } from "./tables";
 
 /**
  * Users table relations
@@ -16,6 +16,13 @@ export const usersRelations = relations(users, ({ one, many }) => ({
 }));
 
 /**
+ * Tenant Types table relations
+ */
+export const tenantTypesRelations = relations(tenantTypes, ({ many }) => ({
+  tenants: many(tenants),
+}));
+
+/**
  * Tenants table relations
  */
 export const tenantsRelations = relations(tenants, ({ one, many }) => ({
@@ -23,6 +30,10 @@ export const tenantsRelations = relations(tenants, ({ one, many }) => ({
     fields: [tenants.ownerId],
     references: [users.id],
     relationName: "tenantOwner",
+  }),
+  type: one(tenantTypes, {
+    fields: [tenants.typeId],
+    references: [tenantTypes.id],
   }),
   tenantUsers: many(tenantUser),
 }));

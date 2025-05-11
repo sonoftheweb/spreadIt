@@ -25,6 +25,17 @@ export const users = sqliteTable("users", {
 });
 
 /**
+ * Tenant Types table schema
+ */
+export const tenantTypes = sqliteTable("tenant_types", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull().unique(),
+  key: text("key").notNull().unique(),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
+});
+
+/**
  * Tenants table schema
  */
 export const tenants = sqliteTable("tenants", {
@@ -32,6 +43,7 @@ export const tenants = sqliteTable("tenants", {
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
   domain: text("domain").unique(),
+  typeId: text("type_id").notNull().references(() => tenantTypes.id),
   ownerId: text("owner_id"),
   createdAt: integer("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
   updatedAt: integer("updated_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
@@ -73,7 +85,7 @@ export const passwordResetTokens = sqliteTable("password_reset_tokens", {
  * Personal Access Tokens table schema
  */
 export const personalAccessTokens = sqliteTable("personal_access_tokens", {
-  id: text("id").primaryKey(),
+  id: integer("id").primaryKey({ autoIncrement: true }),
   tokenableType: text("tokenable_type").notNull(),
   tokenableId: text("tokenable_id").notNull(),
   name: text("name").notNull(),
@@ -89,24 +101,28 @@ export const personalAccessTokens = sqliteTable("personal_access_tokens", {
  * Failed Jobs table schema
  */
 export const failedJobs = sqliteTable("failed_jobs", {
-  id: text("id").primaryKey(),
+  id: integer("id").primaryKey({ autoIncrement: true }),
   uuid: text("uuid").notNull().unique(),
   connection: text("connection").notNull(),
   queue: text("queue").notNull(),
   payload: text("payload").notNull(),
   exception: text("exception").notNull(),
-  failedAt: integer("failed_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
+  failedAt: integer("failed_at", { mode: "timestamp" }).default(
+    sql`(unixepoch())`
+  ),
 });
 
 /**
  * Jobs table schema
  */
 export const jobs = sqliteTable("jobs", {
-  id: text("id").primaryKey(),
+  id: integer("id").primaryKey({ autoIncrement: true }),
   queue: text("queue").notNull(),
   payload: text("payload").notNull(),
   attempts: integer("attempts").notNull(),
   reservedAt: integer("reserved_at", { mode: "timestamp" }),
   availableAt: integer("available_at", { mode: "timestamp" }).notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(
+    sql`(unixepoch())`
+  ),
 });
