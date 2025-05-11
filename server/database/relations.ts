@@ -9,6 +9,10 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   personalTokens: many(personalAccessTokens, {
     relationName: "userPersonalTokens",
   }),
+  activeTenant: one(tenants, {
+    fields: [users.lastActiveTenantId],
+    references: [tenants.id],
+  }),
 }));
 
 /**

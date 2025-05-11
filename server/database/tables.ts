@@ -4,6 +4,7 @@ import {
   integer,
   primaryKey,
 } from "drizzle-orm/sqlite-core";
+import { sql } from "drizzle-orm";
 
 /**
  * Users table schema
@@ -16,8 +17,10 @@ export const users = sqliteTable("users", {
   password: text("password").notNull(),
   rememberToken: text("remember_token", { length: 100 }),
   approved: integer("approved").default(0),
-  createdAt: integer("created_at", { mode: "timestamp" }).defaultNow(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).defaultNow(),
+  lastActiveTenantId: text("last_active_tenant_id"),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
+
   deletedAt: integer("deleted_at", { mode: "timestamp" }),
 });
 
@@ -30,8 +33,9 @@ export const tenants = sqliteTable("tenants", {
   slug: text("slug").notNull().unique(),
   domain: text("domain").unique(),
   ownerId: text("owner_id"),
-  createdAt: integer("created_at", { mode: "timestamp" }).defaultNow(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).defaultNow(),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
+
   deletedAt: integer("deleted_at", { mode: "timestamp" }),
 });
 
@@ -46,9 +50,9 @@ export const tenantUser = sqliteTable(
     role: text("role"),
     joinedAt: integer("joined_at", { mode: "timestamp" })
       .notNull()
-      .defaultNow(),
-    createdAt: integer("created_at", { mode: "timestamp" }).defaultNow(),
-    updatedAt: integer("updated_at", { mode: "timestamp" }).defaultNow(),
+      .default(sql`(unixepoch())`),
+    createdAt: integer("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
+    updatedAt: integer("updated_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
   },
   (table) => ({
     pk: primaryKey({ columns: [table.tenantId, table.userId] }),
@@ -61,7 +65,8 @@ export const tenantUser = sqliteTable(
 export const passwordResetTokens = sqliteTable("password_reset_tokens", {
   email: text("email").notNull(),
   token: text("token").notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }).defaultNow(),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
+
 });
 
 /**
@@ -76,8 +81,8 @@ export const personalAccessTokens = sqliteTable("personal_access_tokens", {
   abilities: text("abilities"),
   lastUsedAt: integer("last_used_at", { mode: "timestamp" }),
   expiresAt: integer("expires_at", { mode: "timestamp" }),
-  createdAt: integer("created_at", { mode: "timestamp" }).defaultNow(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).defaultNow(),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
 });
 
 /**
@@ -90,7 +95,7 @@ export const failedJobs = sqliteTable("failed_jobs", {
   queue: text("queue").notNull(),
   payload: text("payload").notNull(),
   exception: text("exception").notNull(),
-  failedAt: integer("failed_at", { mode: "timestamp" }).defaultNow(),
+  failedAt: integer("failed_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
 });
 
 /**
@@ -103,5 +108,5 @@ export const jobs = sqliteTable("jobs", {
   attempts: integer("attempts").notNull(),
   reservedAt: integer("reserved_at", { mode: "timestamp" }),
   availableAt: integer("available_at", { mode: "timestamp" }).notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }).defaultNow(),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
 });

@@ -2,8 +2,8 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
-* {
-    font-family: "Funnel Sans", sans-serif;
+@theme {
+    --font-sans: "Funnel Sans", sans;
 }
 
 h1,

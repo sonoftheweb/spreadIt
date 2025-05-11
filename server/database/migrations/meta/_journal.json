@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1746843821497,
-      "tag": "0000_right_blindfold",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1746938637137,
-      "tag": "0001_third_lady_bullseye",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1746938972321,
-      "tag": "0002_thick_professor_monster",
+      "when": 1746979255196,
+      "tag": "0000_blushing_robin_chapel",
       "breakpoints": true
     }
   ]

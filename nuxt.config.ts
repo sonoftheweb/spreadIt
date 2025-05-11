@@ -4,6 +4,9 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ["@nuxt/ui", "@nuxt/icon", "@vee-validate/nuxt"],
   css: ["~/assets/css/main.css"],
+  ui: {
+    fonts: false,
+  },
   veeValidate: {
     autoImports: false,
   },

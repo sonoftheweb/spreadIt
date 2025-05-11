@@ -5,7 +5,7 @@ CREATE TABLE `failed_jobs` (
 	`queue` text NOT NULL,
 	`payload` text NOT NULL,
 	`exception` text NOT NULL,
-	`failed_at` integer DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer))
+	`failed_at` integer DEFAULT (unixepoch())
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `failed_jobs_uuid_unique` ON `failed_jobs` (`uuid`);--> statement-breakpoint
@@ -16,13 +16,13 @@ CREATE TABLE `jobs` (
 	`attempts` integer NOT NULL,
 	`reserved_at` integer,
 	`available_at` integer NOT NULL,
-	`created_at` integer DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer))
+	`created_at` integer DEFAULT (unixepoch())
 );
 --> statement-breakpoint
 CREATE TABLE `password_reset_tokens` (
 	`email` text NOT NULL,
 	`token` text NOT NULL,
-	`created_at` integer DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer))
+	`created_at` integer DEFAULT (unixepoch())
 );
 --> statement-breakpoint
 CREATE TABLE `personal_access_tokens` (
@@ -34,8 +34,8 @@ CREATE TABLE `personal_access_tokens` (
 	`abilities` text,
 	`last_used_at` integer,
 	`expires_at` integer,
-	`created_at` integer DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer)),
-	`updated_at` integer DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer))
+	`created_at` integer DEFAULT (unixepoch()),
+	`updated_at` integer DEFAULT (unixepoch())
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `personal_access_tokens_token_unique` ON `personal_access_tokens` (`token`);--> statement-breakpoint
@@ -43,9 +43,9 @@ CREATE TABLE `tenant_user` (
 	`user_id` text NOT NULL,
 	`tenant_id` text NOT NULL,
 	`role` text,
-	`joined_at` integer DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer)) NOT NULL,
-	`created_at` integer DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer)),
-	`updated_at` integer DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer)),
+	`joined_at` integer DEFAULT (unixepoch()) NOT NULL,
+	`created_at` integer DEFAULT (unixepoch()),
+	`updated_at` integer DEFAULT (unixepoch()),
 	PRIMARY KEY(`tenant_id`, `user_id`)
 );
 --> statement-breakpoint
@@ -55,8 +55,8 @@ CREATE TABLE `tenants` (
 	`slug` text NOT NULL,
 	`domain` text,
 	`owner_id` text,
-	`created_at` integer DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer)),
-	`updated_at` integer DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer)),
+	`created_at` integer DEFAULT (unixepoch()),
+	`updated_at` integer DEFAULT (unixepoch()),
 	`deleted_at` integer
 );
 --> statement-breakpoint
@@ -69,9 +69,10 @@ CREATE TABLE `users` (
 	`email_verified_at` integer,
 	`password` text NOT NULL,
 	`remember_token` text(100),
+	`approved` integer DEFAULT 0,
 	`last_active_tenant_id` text,
-	`created_at` integer DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer)),
-	`updated_at` integer DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer)),
+	`created_at` integer DEFAULT (unixepoch()),
+	`updated_at` integer DEFAULT (unixepoch()),
 	`deleted_at` integer
 );
 --> statement-breakpoint

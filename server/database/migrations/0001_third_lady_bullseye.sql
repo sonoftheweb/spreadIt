@@ -1,1 +1,0 @@
-ALTER TABLE `users` ADD `approved` integer DEFAULT 0;
